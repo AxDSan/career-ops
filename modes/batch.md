@@ -4,22 +4,41 @@ Dos modos de uso: **conductor --chrome** (navega portales en tiempo real) o **st
 
 ## Arquitectura
 
+### Opción A: Paperclip Agent (Recomendado)
+
+Si usas Paperclip para FluxSpeak, CareerOps puede correr como otro agente autónomo en el mismo daemon:
+
 ```
-Hermes Conductor (hermes --chrome --dangerously-skip-permissions)
+Paperclip Daemon (heartbeat cada hora)
   │
-  │  Chrome: navega portales (sesiones logueadas)
-  │  Lee DOM directo — el usuario ve todo en tiempo real
+  ├─ Research Agent → FluxSpeak
+  ├─ Content Agent → FluxSpeak
+  ├─ CMO Agent → FluxSpeak
+  └─ 💼 CareerOps Agent → career-ops
+       │
+       └─ Corre una vez al día
+           └─ Si hay ofertas pendientes:
+               └─ Ejecuta batch/batch-orchestrator.py
+                   └─ Hermes chat -q --skills career-ops
+                       └─ Evaluación A-F + PDF + tracker
+```
+
+**Ventajas:**
+- Un solo daemon 24/7
+- No conflictos de PID
+- CareerOps solo se activa cuando hay ofertas pendientes
+- No interfiere con FluxSpeak
+
+### Opción B: Hermes Conductor Manual
+
+```
+Hermes Conductor (navega portales con Playwright)
   │
   ├─ Oferta 1: lee JD del DOM + URL
-  │    └─► hermes -p worker → report .md + PDF + tracker-line
-  │
-  ├─ Oferta 2: click siguiente, lee JD + URL
-  │    └─► hermes -p worker → report .md + PDF + tracker-line
+  │    └─► delegate_task worker → report .md + PDF + tracker line
   │
   └─ Fin: merge tracker-additions → applications.md + resumen
 ```
-
-Cada worker es un `hermes -p` hijo con contexto limpio de 200K tokens. El conductor solo orquesta.
 
 ## Archivos
 
@@ -54,18 +73,24 @@ batch/
 5. **Paginación**: Si no hay más ofertas → click "Next" → repetir
 6. **Fin**: Merge `tracker-additions/` → `applications.md` + resumen
 
-## Modo B: Script standalone
+## Modo B: Batch Orchestrator (Hermes nativo)
 
 ```bash
-batch/batch-runner.sh [OPTIONS]
+batch/batch-orchestrator.py [OPTIONS]
 ```
+
+El orquestador usa `hermes chat -q --skills career-ops` para procesar cada oferta. No necesitas `hermes -p` ni `claude -p`.
 
 Opciones:
 - `--dry-run` — lista pendientes sin ejecutar
 - `--retry-failed` — solo reintenta fallidas
 - `--start-from N` — empieza desde ID N
-- `--parallel N` — N workers en paralelo
+- `--parallel N` — N workers en paralelo vía asyncio
 - `--max-retries N` — intentos por oferta (default: 2)
+
+### Desde Paperclip
+
+Si ya tienes Paperclip corriendo para FluxSpeak, añade ofertas a `batch/batch-input.tsv` y el `CareerOpsAgent` las procesará automáticamente (máximo una vez al día para no saturar).
 
 ## Formato batch-state.tsv
 
@@ -82,9 +107,9 @@ id	url	status	started_at	completed_at	report_num	score	error	retries
 - Lock file (`batch-runner.pid`) previene ejecución doble
 - Cada worker es independiente: fallo en oferta #47 no afecta a las demás
 
-## Workers (hermes -p)
+## Workers (Hermes Agent)
 
-Cada worker recibe `batch-prompt.md` como system prompt. Es self-contained.
+Cada worker es un proceso `hermes chat -q --skills career-ops --toolsets terminal,file,web` que recibe el prompt completo de `batch-prompt.md` + los datos de la oferta. Es self-contained.
 
 El worker produce:
 1. Report `.md` en `reports/`
