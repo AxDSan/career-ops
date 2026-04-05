@@ -1,7 +1,7 @@
 {
   "name": "career-ops",
   "version": "1.0.0",
-  "description": "AI-powered job search pipeline built on Claude Code",
+  "description": "AI-powered job search pipeline built on Hermes Agent",
   "scripts": {
     "verify": "node verify-pipeline.mjs",
     "normalize": "node normalize-statuses.mjs",
@@ -10,12 +10,18 @@
     "pdf": "node generate-pdf.mjs",
     "sync-check": "node cv-sync-check.mjs"
   },
-  "keywords": ["ai", "job-search", "claude-code", "career", "automation"],
-  "author": "Santiago Fernández de Valderrama <hi@santifer.io> (https://santifer.io)",
-  "homepage": "https://santifer.io",
+  "keywords": [
+    "ai",
+    "job-search",
+    "hermes-agent",
+    "career",
+    "automation"
+  ],
+  "author": "Santiago Fern\u00e1ndez de Valderrama <hi@santifer.io> (https://santifer.io)",
+  "homepage": "https://github.com/AxDSan/career-ops",
   "repository": {
     "type": "git",
-    "url": "https://github.com/santifer/career-ops"
+    "url": "https://github.com/AxDSan/career-ops"
   },
   "license": "MIT",
   "dependencies": {

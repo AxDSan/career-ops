@@ -2,9 +2,9 @@
 
 **[:gb: English](#what-is-this)** | **[:es: Español](#es-versión-en-español)**
 
-> AI-powered job search pipeline built on Claude Code. Evaluate offers, generate tailored CVs, scan portals, and track everything -- powered by AI agents.
+> AI-powered job search pipeline built on Hermes Agent. Evaluate offers, generate tailored CVs, scan portals, and track everything -- powered by AI agents.
 
-![Claude Code](https://img.shields.io/badge/Claude_Code-000?style=flat&logo=anthropic&logoColor=white)
+![Hermes Agent](https://img.shields.io/badge/Hermes_Agent-000?style=flat&logo=anthropic&logoColor=white)
 ![Node.js](https://img.shields.io/badge/Node.js-339933?style=flat&logo=node.js&logoColor=white)
 ![Go](https://img.shields.io/badge/Go-00ADD8?style=flat&logo=go&logoColor=white)
 ![Playwright](https://img.shields.io/badge/Playwright-2EAD33?style=flat&logo=playwright&logoColor=white)
@@ -18,7 +18,7 @@
 
 ## What Is This
 
-Career-Ops turns Claude Code into a full job search command center. Instead of manually tracking applications in a spreadsheet, you get an AI-powered pipeline that:
+Career-Ops turns Hermes Agent into a full job search command center. Instead of manually tracking applications in a spreadsheet, you get an AI-powered pipeline that:
 
 - **Evaluates offers** with a structured A-F scoring system (10 weighted dimensions)
 - **Generates tailored PDFs** -- ATS-optimized CVs customized per job description
@@ -40,7 +40,7 @@ Built by someone who used it to evaluate 740+ job offers, generate 100+ tailored
 | **Negotiation Scripts** | Salary negotiation frameworks, geographic discount pushback, competing offer leverage |
 | **ATS PDF Generation** | Keyword-injected CVs with Space Grotesk + DM Sans design |
 | **Portal Scanner** | 45+ companies pre-configured (Anthropic, OpenAI, ElevenLabs, Retool, n8n...) + custom queries across Ashby, Greenhouse, Lever, Wellfound |
-| **Batch Processing** | Parallel evaluation with `claude -p` workers |
+| **Batch Processing** | Parallel evaluation with `delegate_task` workers |
 | **Dashboard TUI** | Terminal UI to browse, filter, and sort your pipeline |
 | **Pipeline Integrity** | Automated merge, dedup, status normalization, health checks |
 
@@ -48,7 +48,7 @@ Built by someone who used it to evaluate 740+ job offers, generate 100+ tailored
 
 ```bash
 # 1. Clone and install
-git clone https://github.com/santifer/career-ops.git
+git clone https://github.com/santifercareer-ops.git
 cd career-ops && npm install
 npx playwright install chromium   # Required for PDF generation
 
@@ -59,20 +59,20 @@ cp templates/portals.example.yml portals.yml       # Customize companies
 # 3. Add your CV
 # Create cv.md in the project root with your CV in markdown
 
-# 4. Personalize with Claude
-claude   # Open Claude Code in this directory
+# 4. Personalize with Hermes
+hermes   # Open Hermes Agent in this directory
 
-# Then ask Claude to adapt the system to you:
+# Then ask Hermes to adapt the system to you:
 # "Change the archetypes to backend engineering roles"
 # "Translate the modes to English"
 # "Add these 5 companies to portals.yml"
 # "Update my profile with this CV I'm pasting"
 
 # 5. Start using
-# Paste a job URL or run /career-ops
+# Paste a job URL or run career-ops
 ```
 
-> **The system is designed to be customized by Claude itself.** Modes, archetypes, scoring weights, negotiation scripts -- just ask Claude to change them. It reads the same files it uses, so it knows exactly what to edit.
+> **The system is designed to be customized by Hermes itself.** Modes, archetypes, scoring weights, negotiation scripts -- just ask Hermes to change them. It reads the same files it uses, so it knows exactly what to edit.
 
 See [docs/SETUP.md](docs/SETUP.md) for the full setup guide.
 
@@ -81,18 +81,18 @@ See [docs/SETUP.md](docs/SETUP.md) for the full setup guide.
 Career-ops is a single slash command with multiple modes:
 
 ```
-/career-ops                → Show all available commands
-/career-ops {paste a JD}   → Full auto-pipeline (evaluate + PDF + tracker)
-/career-ops scan           → Scan portals for new offers
-/career-ops pdf            → Generate ATS-optimized CV
-/career-ops batch          → Batch evaluate multiple offers
-/career-ops tracker        → View application status
-/career-ops apply          → Fill application forms with AI
-/career-ops pipeline       → Process pending URLs
-/career-ops contacto       → LinkedIn outreach message
-/career-ops deep           → Deep company research
-/career-ops training       → Evaluate a course/cert
-/career-ops project        → Evaluate a portfolio project
+career-ops                → Show all available commands
+career-ops {paste a JD}   → Full auto-pipeline (evaluate + PDF + tracker)
+career-ops scan           → Scan portals for new offers
+career-ops pdf            → Generate ATS-optimized CV
+career-ops batch          → Batch evaluate multiple offers
+career-ops tracker        → View application status
+career-ops apply          → Fill application forms with AI
+career-ops pipeline       → Process pending URLs
+career-ops contacto       → LinkedIn outreach message
+career-ops deep           → Deep company research
+career-ops training       → Evaluate a course/cert
+career-ops project        → Evaluate a portfolio project
 ```
 
 Or just paste a job URL or description directly -- career-ops auto-detects it and runs the full pipeline.
@@ -150,7 +150,7 @@ Features: 6 filter tabs, 4 sort modes, grouped/flat view, lazy-loaded previews, 
 
 ```
 career-ops/
-├── CLAUDE.md                    # Agent instructions
+├── HERMES.md                    # Agent instructions
 ├── cv.md                        # Your CV (create this)
 ├── article-digest.md            # Your proof points (optional)
 ├── config/
@@ -180,13 +180,13 @@ career-ops/
 
 ## Tech Stack
 
-![Claude Code](https://img.shields.io/badge/Claude_Code-000?style=flat&logo=anthropic&logoColor=white)
+![Hermes Agent](https://img.shields.io/badge/Hermes_Agent-000?style=flat&logo=anthropic&logoColor=white)
 ![Node.js](https://img.shields.io/badge/Node.js-339933?style=flat&logo=node.js&logoColor=white)
 ![Playwright](https://img.shields.io/badge/Playwright-2EAD33?style=flat&logo=playwright&logoColor=white)
 ![Go](https://img.shields.io/badge/Go-00ADD8?style=flat&logo=go&logoColor=white)
 ![Bubble Tea](https://img.shields.io/badge/Bubble_Tea-FF75B5?style=flat&logo=go&logoColor=white)
 
-- **Agent**: Claude Code with custom skills and modes
+- **Agent**: Hermes Agent with custom skills and modes
 - **PDF**: Playwright/Puppeteer + HTML template
 - **Scanner**: Playwright + Greenhouse API + WebSearch
 - **Dashboard**: Go + Bubble Tea + Lipgloss (Catppuccin Mocha theme)
@@ -212,7 +212,7 @@ MIT
 
 ## Que es esto
 
-Career-Ops convierte Claude Code en un centro de mando de busqueda de empleo. En vez de trackear aplicaciones en un spreadsheet, tienes un pipeline AI que:
+Career-Ops convierte Hermes Agent en un centro de mando de busqueda de empleo. En vez de trackear aplicaciones en un spreadsheet, tienes un pipeline AI que:
 
 - **Evalua ofertas** con scoring estructurado A-F (10 dimensiones ponderadas)
 - **Genera PDFs personalizados** -- CVs ATS-optimizados por oferta
@@ -222,13 +222,13 @@ Career-Ops convierte Claude Code en un centro de mando de busqueda de empleo. En
 
 > **Importante: Esto NO es para spamear empresas.** El objetivo es aplicar solo donde hay match real -- por tu bien y por el de quien lea tu aplicacion. El scoring te ayuda a centrarte en las oportunidades de alto fit en vez de perder el tiempo de todos. Siempre revisa antes de enviar.
 
-Construido por alguien que lo uso para evaluar 740+ ofertas, generar 100+ CVs personalizados, y conseguir un rol de Head of Applied AI. [Lee el case study completo](https://santifer.io/career-ops).
+Construido por alguien que lo uso para evaluar 740+ ofertas, generar 100+ CVs personalizados, y conseguir un rol de Head of Applied AI. [Lee el case study completo](https://santifer.iocareer-ops).
 
 ## Inicio rapido
 
 ```bash
 # 1. Clonar
-git clone https://github.com/santifer/career-ops.git
+git clone https://github.com/santifercareer-ops.git
 cd career-ops && npm install
 
 # 2. Configurar
@@ -238,20 +238,20 @@ cp templates/portals.example.yml portals.yml       # Personalizar empresas
 # 3. Añadir tu CV
 # Crear cv.md en la raiz del proyecto con tu CV en markdown
 
-# 4. Personalizar con Claude
-claude   # Abrir Claude Code en este directorio
+# 4. Personalizar con Hermes
+hermes   # Abrir Hermes Agent en este directorio
 
-# Pidele a Claude que adapte el sistema a ti:
+# Pidele a Hermes que adapte el sistema a ti:
 # "Cambia los arquetipos a roles de backend"
 # "Traduce los modes a ingles"
 # "Añade estas empresas a portals.yml"
 # "Actualiza mi perfil con este CV que te pego"
 
 # 5. Usar
-# Pega una URL de oferta o ejecuta /career-ops
+# Pega una URL de oferta o ejecuta career-ops
 ```
 
-> **El sistema esta diseñado para que Claude lo personalice.** Modes, arquetipos, scoring, scripts de negociacion -- solo pidelo. Claude lee los mismos archivos que usa, asi que sabe exactamente que editar.
+> **El sistema esta diseñado para que Hermes lo personalice.** Modes, arquetipos, scoring, scripts de negociacion -- solo pidelo. Hermes lee los mismos archivos que usa, asi que sabe exactamente que editar.
 
 Guia completa en [docs/SETUP.md](docs/SETUP.md).
 
@@ -275,16 +275,16 @@ El scanner viene con **45+ empresas** pre-configuradas y **19 queries** en los p
 Career-ops es un unico slash command con multiples modos:
 
 ```
-/career-ops                → Mostrar todos los comandos
-/career-ops {pega un JD}   → Pipeline completo (evaluar + PDF + tracker)
-/career-ops scan           → Escanear portales
-/career-ops pdf            → Generar CV ATS-optimizado
-/career-ops batch          → Evaluar ofertas en batch
-/career-ops tracker        → Ver estado de aplicaciones
-/career-ops apply          → Rellenar formularios con IA
-/career-ops pipeline       → Procesar URLs pendientes
-/career-ops contacto       → Mensaje LinkedIn outreach
-/career-ops deep           → Research profundo de empresa
+career-ops                → Mostrar todos los comandos
+career-ops {pega un JD}   → Pipeline completo (evaluar + PDF + tracker)
+career-ops scan           → Escanear portales
+career-ops pdf            → Generar CV ATS-optimizado
+career-ops batch          → Evaluar ofertas en batch
+career-ops tracker        → Ver estado de aplicaciones
+career-ops apply          → Rellenar formularios con IA
+career-ops pipeline       → Procesar URLs pendientes
+career-ops contacto       → Mensaje LinkedIn outreach
+career-ops deep           → Research profundo de empresa
 ```
 
 O simplemente pega una URL o descripcion de oferta -- career-ops la detecta y ejecuta el pipeline completo.

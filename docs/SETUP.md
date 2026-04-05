@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-- [Claude Code](https://claude.ai/code) installed and configured
+- [Hermes Agent](https://hermes.ai/code) installed and configured
 - Node.js 18+ (for PDF generation and utility scripts)
 - (Optional) Go 1.21+ (for the dashboard TUI)
 
@@ -11,7 +11,7 @@
 ### 1. Clone and install
 
 ```bash
-git clone https://github.com/santifer/career-ops.git
+git clone https://github.com/santifercareer-ops.git
 cd career-ops
 npm install
 npx playwright install chromium   # Required for PDF generation
@@ -44,10 +44,10 @@ Edit `portals.yml`:
 
 ### 5. Start using
 
-Open Claude Code in this directory:
+Open Hermes Agent in this directory:
 
 ```bash
-claude
+hermes
 ```
 
 Then paste a job offer URL or description. Career-ops will automatically evaluate it, generate a report, create a tailored PDF, and track it.
@@ -57,12 +57,12 @@ Then paste a job offer URL or description. Career-ops will automatically evaluat
 | Action | How |
 |--------|-----|
 | Evaluate an offer | Paste a URL or JD text |
-| Search for offers | `/career-ops scan` |
-| Process pending URLs | `/career-ops pipeline` |
-| Generate a PDF | `/career-ops pdf` |
-| Batch evaluate | `/career-ops batch` |
-| Check tracker status | `/career-ops tracker` |
-| Fill application form | `/career-ops apply` |
+| Search for offers | `career-ops scan` |
+| Process pending URLs | `career-ops pipeline` |
+| Generate a PDF | `career-ops pdf` |
+| Batch evaluate | `career-ops batch` |
+| Check tracker status | `career-ops tracker` |
+| Fill application form | `career-ops apply` |
 
 ## Verify Setup
 
