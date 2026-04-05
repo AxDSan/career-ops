@@ -347,6 +347,7 @@ def main():
     parser.add_argument("--retry-failed", action="store_true", help="Only retry failed offers")
     parser.add_argument("--start-from", type=int, default=0, help="Start from offer ID N")
     parser.add_argument("--max-retries", type=int, default=DEFAULT_MAX_RETRIES, help="Max retries per offer")
+    parser.add_argument("--limit", type=int, default=0, help="Limit number of pending offers to process (0 = unlimited)")
     args = parser.parse_args()
 
     if not INPUT_FILE.exists():
@@ -379,11 +380,13 @@ def main():
     pending = []
     for offer in offers:
         offer_id = offer["id"]
-        try:
-            if int(offer_id) < args.start_from:
-                continue
-        except ValueError:
-            continue
+        # Only apply start_from to numeric IDs
+        if args.start_from > 0:
+            try:
+                if int(offer_id) < args.start_from:
+                    continue
+            except ValueError:
+                pass
 
         status = get_status(state_rows, offer_id)
         retries = get_retries(state_rows, offer_id)
@@ -403,10 +406,14 @@ def main():
 
         pending.append(offer)
 
+    if args.limit > 0:
+        pending = pending[:args.limit]
+
     pending_count = len(pending)
+    limit_str = f" (limited to {args.limit})" if args.limit > 0 else ""
     log(f"=== career-ops batch orchestrator ===")
     log(f"Parallel: {args.parallel} | Max retries: {args.max_retries}")
-    log(f"Input: {total_input} offers | Pending: {pending_count}")
+    log(f"Input: {total_input} offers | Pending: {pending_count}{limit_str}")
 
     if pending_count == 0:
         log("No offers to process.")
