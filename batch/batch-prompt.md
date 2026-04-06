@@ -167,7 +167,7 @@ Donde `{company-slug}` es el nombre de empresa en lowercase, sin espacios, con g
 **Arquetipo:** {detectado}
 **Score:** {X/5}
 **URL:** {URL de la oferta original}
-**PDF:** career-ops/output/cv-candidate-{company-slug}-{{DATE}}.pdf
+**PDF:** career-ops/output/cv-candidate-{{ID}}-{{DATE}}.pdf
 **Batch ID:** {{ID}}
 
 ---
@@ -209,12 +209,12 @@ Donde `{company-slug}` es el nombre de empresa en lowercase, sin espacios, con g
 9. Construye competency grid (6-8 keyword phrases)
 10. Inyecta keywords en logros existentes (**NUNCA inventa**)
 11. Genera HTML completo desde template (lee `templates/cv-template.html`)
-12. Escribe HTML a `/tmp/cv-candidate-{company-slug}.html`
+12. Escribe HTML a `/tmp/cv-candidate-{{ID}}.html`
 13. Ejecuta:
 ```bash
 node generate-pdf.mjs \
-  /tmp/cv-candidate-{company-slug}.html \
-  output/cv-candidate-{company-slug}-{{DATE}}.pdf \
+  /tmp/cv-candidate-{{ID}}.html \
+  output/cv-candidate-{{ID}}-{{DATE}}.pdf \
   --format={letter|a4}
 ```
 14. Reporta: ruta PDF, nº páginas, % cobertura keywords

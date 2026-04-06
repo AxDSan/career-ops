@@ -160,7 +160,7 @@ def read_input_offers():
     return offers
 
 
-def build_worker_prompt(url, jd_file, report_num, date, offer_id):
+def build_worker_prompt(url, jd_file, report_num, date, offer_id, company="", title=""):
     prompt_template = PROMPT_FILE.read_text()
     # Replace placeholders
     prompt = prompt_template.replace("{{URL}}", url)
@@ -168,6 +168,8 @@ def build_worker_prompt(url, jd_file, report_num, date, offer_id):
     prompt = prompt.replace("{{REPORT_NUM}}", report_num)
     prompt = prompt.replace("{{DATE}}", date)
     prompt = prompt.replace("{{ID}}", str(offer_id))
+    prompt = prompt.replace("{{COMPANY}}", company)
+    prompt = prompt.replace("{{TITLE}}", title)
 
     # Prepend job description content if file exists
     jd_content = ""
@@ -263,7 +265,9 @@ async def process_offer(offer, date, parallel_semaphore):
     update_state(offer_id, url, "processing", started_at, "-", report_num, "-", "-", retries)
 
     # Build prompt
-    prompt = build_worker_prompt(url, jd_file, report_num, date, offer_id)
+    company = offer.get("company", "")
+    title = offer.get("title", "")
+    prompt = build_worker_prompt(url, jd_file, report_num, date, offer_id, company, title)
     log_file = LOGS_DIR / f"{report_num}-{offer_id}.log"
 
     async with parallel_semaphore:
