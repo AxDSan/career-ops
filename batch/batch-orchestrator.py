@@ -197,7 +197,6 @@ async def run_hermes_worker(prompt, log_file):
     cmd = [
         "hermes", "chat", "-q", prompt,
         "--quiet",
-        "--skills", "career-ops",
         "--toolsets", "terminal,file,web",
     ]
 
