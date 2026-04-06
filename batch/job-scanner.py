@@ -207,11 +207,11 @@ def run_scan():
 
     # Check DuckDuckGo availability early (needed for tracked companies websearch too)
     try:
-        from duckduckgo_search import DDGS
+        from ddgs import DDGS
         have_ddgs = True
     except ImportError:
         have_ddgs = False
-        log("  ⚠️ duckduckgo-search not available, skipping all web search queries")
+        log("  ⚠️ ddgs not available, skipping all web search queries")
 
     # === Level 1 & 2: Tracked companies (APIs + WebSearch) ===
     for company in portals.get("tracked_companies", []):
