@@ -205,7 +205,15 @@ def run_scan():
 
     all_candidates = []
 
-    # === Level 1 & 2: Tracked companies (APIs) ===
+    # Check DuckDuckGo availability early (needed for tracked companies websearch too)
+    try:
+        from duckduckgo_search import DDGS
+        have_ddgs = True
+    except ImportError:
+        have_ddgs = False
+        log("  ⚠️ duckduckgo-search not available, skipping all web search queries")
+
+    # === Level 1 & 2: Tracked companies (APIs + WebSearch) ===
     for company in portals.get("tracked_companies", []):
         if not company.get("enabled", True):
             continue
@@ -214,32 +222,60 @@ def run_scan():
         careers_url = company.get("careers_url", "")
         api_url = company.get("api", "")
         scan_method = company.get("scan_method", "api")
+        scan_query = company.get("scan_query", "")
 
         jobs = []
 
-        # Try explicit API first
-        if api_url and "greenhouse" in api_url:
-            # Extract board token from API URL
-            parsed = urlparse(api_url)
-            parts = parsed.path.strip("/").split("/")
-            if len(parts) >= 3:
-                board_token = parts[2]
-                jobs = fetch_greenhouse_jobs(board_token)
+        if scan_method == "websearch" and scan_query and have_ddgs:
+            try:
+                with DDGS() as ddgs:
+                    results = list(ddgs.text(scan_query, max_results=10))
+            except Exception as e:
+                log(f"  ⚠️ DDGS error for {name}: {e}")
+                results = []
 
-        # Fallback to URL-based extraction
-        if not jobs and careers_url:
-            if "greenhouse.io" in careers_url:
-                token = extract_board_token(careers_url)
-                if token:
-                    jobs = fetch_greenhouse_jobs(token)
-            elif "jobs.ashbyhq.com" in careers_url:
-                slug = extract_ashby_slug(careers_url)
-                if slug:
-                    jobs = fetch_ashby_jobs(slug)
-            elif "jobs.lever.co" in careers_url:
-                slug = extract_lever_slug(careers_url)
-                if slug:
-                    jobs = fetch_lever_jobs(slug)
+            log(f"  🔍 {name}: {len(results)} web results")
+            for r in results:
+                title = r.get("title", "")
+                href = r.get("href", "")
+                if not href or not href.startswith("http"):
+                    continue
+                m = re.search(r"(.+?)(?:\s*[@|—–-]\s*|\s+at\s+)(.+?)$", title)
+                if m:
+                    job_title = m.group(1).strip()
+                    company_name = m.group(2).strip()
+                else:
+                    job_title = title
+                    company_name = name
+                jobs.append({
+                    "title": job_title,
+                    "url": href,
+                    "company": company_name,
+                    "location": "",
+                })
+        else:
+            # Try explicit API first
+            if api_url and "greenhouse" in api_url:
+                parsed = urlparse(api_url)
+                parts = parsed.path.strip("/").split("/")
+                if len(parts) >= 3:
+                    board_token = parts[2]
+                    jobs = fetch_greenhouse_jobs(board_token)
+
+            # Fallback to URL-based extraction
+            if not jobs and careers_url:
+                if "greenhouse.io" in careers_url:
+                    token = extract_board_token(careers_url)
+                    if token:
+                        jobs = fetch_greenhouse_jobs(token)
+                elif "jobs.ashbyhq.com" in careers_url:
+                    slug = extract_ashby_slug(careers_url)
+                    if slug:
+                        jobs = fetch_ashby_jobs(slug)
+                elif "jobs.lever.co" in careers_url:
+                    slug = extract_lever_slug(careers_url)
+                    if slug:
+                        jobs = fetch_lever_jobs(slug)
 
         if jobs:
             log(f"  ✅ {name}: {len(jobs)} jobs found")
@@ -251,14 +287,6 @@ def run_scan():
             all_candidates.append(job)
 
     # === Level 3: WebSearch queries ===
-    # Try to use duckduckgo-search if available
-    try:
-        from duckduckgo_search import DDGS
-        have_ddgs = True
-    except ImportError:
-        have_ddgs = False
-        log("  ⚠️ duckduckgo-search not available, skipping web search queries")
-
     if have_ddgs:
         for query_config in portals.get("search_queries", []):
             if not query_config.get("enabled", True):
