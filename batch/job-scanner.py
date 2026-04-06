@@ -8,6 +8,7 @@ and populates batch-input.tsv for evaluation.
 import json
 import re
 import sys
+import time
 import uuid
 from datetime import datetime
 from pathlib import Path
@@ -253,6 +254,7 @@ def run_scan():
                     "company": company_name,
                     "location": "",
                 })
+            time.sleep(1.5)  # Rate limit pause between tracked company searches
         else:
             # Try explicit API first
             if api_url and "greenhouse" in api_url:
@@ -327,6 +329,7 @@ def run_scan():
                     "location": "",
                     "source": qname,
                 })
+            time.sleep(1.5)  # Rate limit pause between search queries
 
     # === Filter & deduplicate ===
     filtered = []
