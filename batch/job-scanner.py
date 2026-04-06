@@ -40,6 +40,25 @@ def load_portals():
         return yaml.safe_load(f)
 
 
+def ddgs_search_with_retry(ddgs, query, max_results=10, retries=3):
+    """Run a DDGS search with exponential backoff on rate limit errors."""
+    for attempt in range(retries):
+        try:
+            return list(ddgs.text(query, max_results=max_results))
+        except Exception as e:
+            err_str = str(e).lower()
+            if "rate" in err_str or "timeout" in err_str or "request" in err_str or "html.duckduckgo.com" in err_str:
+                if attempt < retries - 1:
+                    wait = 5 * (attempt + 1)
+                    log(f"    ⏳ DDGS rate limited, retrying in {wait}s... (attempt {attempt + 1}/{retries})")
+                    time.sleep(wait)
+                else:
+                    raise
+            else:
+                raise
+    return []
+
+
 def load_seen_urls():
     seen = set()
     if SCAN_HISTORY_FILE.exists():
@@ -230,7 +249,7 @@ def run_scan():
         if scan_method == "websearch" and scan_query and have_ddgs:
             try:
                 with DDGS() as ddgs:
-                    results = list(ddgs.text(scan_query, max_results=10))
+                    results = ddgs_search_with_retry(ddgs, scan_query, max_results=10)
             except Exception as e:
                 log(f"  ⚠️ DDGS error for {name}: {e}")
                 results = []
@@ -254,7 +273,7 @@ def run_scan():
                     "company": company_name,
                     "location": "",
                 })
-            time.sleep(1.5)  # Rate limit pause between tracked company searches
+            time.sleep(3.0)  # Rate limit pause between tracked company searches
         else:
             # Try explicit API first
             if api_url and "greenhouse" in api_url:
@@ -300,7 +319,7 @@ def run_scan():
 
             try:
                 with DDGS() as ddgs:
-                    results = list(ddgs.text(query, max_results=10))
+                    results = ddgs_search_with_retry(ddgs, query, max_results=10)
             except Exception as e:
                 log(f"  ⚠️ DDGS error for {qname}: {e}")
                 continue
