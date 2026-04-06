@@ -8,7 +8,34 @@
 
 ## Professional Summary
 
-Versatile Software Developer with expertise spanning full-stack web development, reverse engineering, and security research. Proven track record delivering high-performance applications and websites for clients across diverse industries. Experienced in Windows internals, kernel research, and binary analysis in Windows and Android environments. Open source contributor with a passion for building secure, efficient, and scalable solutions.
+Versatile Software Developer and AI Systems Engineer with deep hands-on expertise in Large Language Models, autonomous agent architecture, and production AI orchestration. Proven track record building complete AI-native platforms from scratch — including a custom autonomous agent framework with native memory, multi-agent orchestration, real-time transcription pipelines, and LLM-powered automation systems. Combines full-stack development excellence with deep systems knowledge in Windows internals, kernel research, and security analysis. Delivers secure, efficient, and scalable solutions across web, mobile, and AI infrastructure.
+
+## AI & LLM Engineering
+
+### Founder & Lead AI Engineer — Hermes Agent Platform
+*2023 – Present*
+- Architected and built a **fully autonomous AI agent framework** from the ground up with native tool integration, multi-agent orchestration, and persistent memory systems
+- Designed **Mnemosyne**, a zero-dependency, sub-millisecond AI memory system using SQLite with native disaster recovery and hybrid cloud sync
+- Implemented **agent loops**, **function calling**, **RAG pipelines**, and **context compression** for long-running autonomous tasks
+- Integrated multiple frontier LLM providers (OpenAI, Anthropic, OpenRouter) with intelligent routing and fallback strategies
+- Built autonomous sub-agents for research, content generation, outreach, and job evaluation that run 24/7 without human intervention
+
+### Founder & AI Engineer — FluxSpeak AI
+*2024 – Present*
+- Built a **real-time AI transcription and translation SaaS** for churches using Deepgram STT, OpenRouter LLM translation, and Cartesia TTS
+- Architected WebSocket-based audio streaming pipeline with sub-second latency for live speech translation across 38+ languages
+- Implemented AI billing with usage-based metering, subscription management, and Stripe integration
+
+### Lead Architect — Paperclip Autonomous Organization
+*2024 – Present*
+- Designed a **24/7 autonomous daemon** that orchestrates multiple AI agents (Research, Content, CareerOps, GPS Gateway)
+- Built automated pipelines where AI agents scan APIs, evaluate opportunities, generate reports, and trigger notifications autonomously
+- Implemented cron-based scheduling, health monitoring, and email reporting for fully autonomous operations
+
+### AI Integrations & Tools
+- **LocalVoiceSync**: Privacy-first local STT application using OpenAI Whisper + local LLM cleanup pipeline
+- **CareerOps**: Autonomous job scanning and evaluation agent that reads JDs, scores matches against CV, and generates personalized PDFs
+- Extensive experience with **prompt engineering**, **LLM evaluation**, **embedding-based search**, and **agent safety boundaries**
 
 ## Professional Experience
 
